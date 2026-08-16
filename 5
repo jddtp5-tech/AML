@@ -1,0 +1,30 @@
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix, classification_report
+
+X, y = datasets.load_iris(return_X_y=True)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=1)
+
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X_train, y_train)
+pred = knn.predict(X_test)
+
+print("KNN")
+print(confusion_matrix(y_test, pred))
+print(classification_report(y_test, pred))
+
+gnb = GaussianNB()
+gnb.fit(X_train, y_train)
+pred = gnb.predict(X_test)
+
+print("Naive Bayes")
+print(confusion_matrix(y_test, pred))
