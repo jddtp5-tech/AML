@@ -1,0 +1,28 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, roc_curve, auc
+
+np.random.seed(0)
+X = np.random.rand(100, 2)
+y = (X[:,0] + X[:,1] > 1).astype(int)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=0)
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, pred))
+
+prob = model.predict_proba(X_test)[:,1]
+fpr, tpr, _ = roc_curve(y_test, prob)
+
+plt.plot(fpr, tpr)
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+plt.title("ROC Curve")
+plt.show()
