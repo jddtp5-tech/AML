@@ -1,0 +1,15 @@
+1.
+
+import statistics
+temp = [35,45,99,22,44,77]
+weather = ["Sunny","Cloudy","Sunny","Rainy","Sunny","Sunny"]
+print("Temperature Data:", temp)
+print("Weather Data:", weather)
+print("\n=== Numerical Data Analysis ===")
+print("Mean:", statistics.mean(temp), "C")
+print("Median:", statistics.median(temp), "C")
+print("Mode:", statistics.mode(temp), "C")
+print("Variance:", statistics.variance(temp))
+print("Standard Deviation:", statistics.stdev(temp), "C")
+print("\n=== Categorical Data Analysis ===")
+print("Weather Mode:", statistics.mode(weather))
