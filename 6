@@ -1,0 +1,50 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.tree import DecisionTreeClassifier
+from sklearn import tree
+from sklearn.metrics import confusion_matrix, classification_report
+import warnings
+
+iris = load_iris()
+
+X = pd.DataFrame(iris["data"], columns=[
+    'sepal length in cm', 'sepal width',
+    'petal length', 'petal width'
+])
+y = iris["target"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=0
+)
+
+treeclassifier = DecisionTreeClassifier()
+treeclassifier.fit(X_train, y_train)
+
+plt.figure(figsize=(15, 10))
+tree.plot_tree(treeclassifier, filled=True)
+plt.show()
+
+param = {
+    'criterion': ['gini', 'entropy', 'log_loss'],
+    'splitter': ['best', 'random'],
+    'max_depth': [1, 2, 3, 4, 5],
+    'max_features': [None, 'sqrt', 'log2']
+}
+
+warnings.filterwarnings('ignore')
+
+grid = GridSearchCV(
+    treeclassifier, param_grid=param, cv=5, scoring='accuracy'
+)
+grid.fit(X_train, y_train)
+
+print("grid parameters", grid.best_params_)
+print("grid score", grid.best_score_)
+
+y_pred = grid.predict(X_test)
+
+print("confusion matrix", confusion_matrix(y_test, y_pred))
+print("classification report")
+print(classification_report(y_test, y_pred))
